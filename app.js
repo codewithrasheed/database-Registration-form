@@ -25,6 +25,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
+const database = getDatabase();
 
 let inp1 = document.getElementById("registration1");
 let inp2 = document.getElementById("registration2");
@@ -47,37 +48,14 @@ window.saveValue = function () {
     lastqualification: inp7.value,
     course: inp8.value,
   };
-  console.log(obj);
-
-  const database = getDatabase();
-  //   var key = Math.random().toString().slice(2);
-  //   console.log(key);
-
   obj.id = Math.random().toString().slice(2);
-
+  
   const taskRef = ref(database, `Form Values/${obj.id}/`);
-  set(taskRef, obj);
+  set(taskRef, obj).then(function(res){
+    window.location.assign("data.html")
+  }).catch(function(err){
+    console.log(err)
+  });
+  console.log(obj);
 };
 
-var parent = document.getElementById("parent");
-function getData() {
-  const database = getDatabase();
-  var dataList = [];
-  const taskRef = ref(database, "Form Values/");
-  onChildAdded(taskRef, function (dt) {
-    dataList.push(dt.val());
-    console.log(dataList);
-    parent.innerHTML = "";
-    for (var i = 0; i < dataList.length; i++) {
-      document.write(`<li>${dataList[i].firstname}</li>`);
-      document.write(`<li>${dataList[i].lastname}</li>`);
-      document.write(`<li>${dataList[i].email}</li>`);
-      document.write(`<li>${dataList[i].password}</li>`);
-      document.write(`<li>${dataList[i].contactno}</li>`);
-      document.write(`<li>${dataList[i].cnic}</li>`);
-      document.write(`<li>${dataList[i].lastqualification}</li>`);
-      document.write(`<li>${dataList[i].course}</li>`);
-    }
-  });
-}
-getData();
