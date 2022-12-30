@@ -52,6 +52,7 @@ window.saveValue = function () {
   
   const taskRef = ref(database, `Form Values/${obj.id}/`);
   set(taskRef, obj).then(function(res){
+    alert("Form Submitted")
     window.location.assign("data.html")
   }).catch(function(err){
     console.log(err)
